@@ -175,21 +175,24 @@ namespace BitBox
                     break;
                 //DrawBit(bitInLine * BIT_SIZE, lineInView * BIT_SIZE, BIT_SIZE, e.Graphics, parser.ParsedData[segmentOffset][bitOffset]);
                 e.Graphics.FillRectangle(betweenBitsBrush, bitInLine * BIT_SIZE, lineInView * BIT_SIZE, BIT_SIZE, BIT_SIZE);
+
+                // Choose relevant brush 
+                SolidBrush choosenBrush;
                 if (data[segmentOffset][bitOffset])
                 {
                     if (bitOffset == 0)
-                        e.Graphics.FillRectangle(bitOneStartSegBrush, bitInLine * BIT_SIZE + 1, lineInView * BIT_SIZE + 1, BIT_SIZE - 2, BIT_SIZE - 2);
+                        choosenBrush = bitOneStartSegBrush;
                     else
-                        e.Graphics.FillRectangle(bitOneBrush, bitInLine * BIT_SIZE + 1, lineInView * BIT_SIZE + 1, BIT_SIZE - 2, BIT_SIZE - 2);
+                        choosenBrush = bitOneBrush;
                 }
                 else
                 {
                     if (bitOffset == 0)
-                        e.Graphics.FillRectangle(bitZeroStartSegBrush, bitInLine * BIT_SIZE + 1, lineInView * BIT_SIZE + 1, BIT_SIZE - 2, BIT_SIZE - 2);
+                        choosenBrush = bitZeroStartSegBrush;
                     else
-                        e.Graphics.FillRectangle(bitZeroBrush, bitInLine * BIT_SIZE + 1, lineInView * BIT_SIZE + 1, BIT_SIZE - 2, BIT_SIZE - 2);
+                        choosenBrush = bitZeroBrush;
                 }
-
+                e.Graphics.FillRectangle(choosenBrush, bitInLine * BIT_SIZE + 1, lineInView * BIT_SIZE + 1, BIT_SIZE - 2, BIT_SIZE - 2);
                 bitOffset++;
                 bitInLine++;
             }
