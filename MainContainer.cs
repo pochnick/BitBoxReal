@@ -61,6 +61,22 @@ namespace BitBox
                 PluginsWindow plugins = new PluginsWindow(parser);
                 plugins.Show();
             }
+            if (e.KeyChar == '=')
+            {
+                if (bitView1.BitSize < 20)
+                {
+                    bitView1.BitSize = bitView1.BitSize +1;
+                    bitView1.Invalidate();
+                }
+            }
+            if (e.KeyChar == '-')
+            {
+                if (bitView1.BitSize > 3)
+                {
+                    bitView1.BitSize = bitView1.BitSize -1;   
+                    bitView1.Invalidate();
+                }
+            }
         }
 
         private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)

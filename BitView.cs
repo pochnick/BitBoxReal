@@ -14,7 +14,7 @@ namespace BitBox
     {
         ViewingData data;
         
-        private const int BIT_SIZE = 10;
+        private int BIT_SIZE = 10;
         private readonly Color BIT_ONE_COLOR = Color.Blue;
         private readonly Color BIT_ZERO_COLOR = Color.White;
         private readonly Color BIT_ONE_START_SEG_COLOR = Color.DarkBlue;
@@ -52,6 +52,18 @@ namespace BitBox
         }
 
         #region parameters
+
+        public int BitSize
+        {
+            get
+            {
+                return BIT_SIZE;
+            }
+            set
+            {
+                BIT_SIZE = value;
+            }
+        }
 
         public ViewingData Data
         {
@@ -178,7 +190,7 @@ namespace BitBox
 
             uint maxBitsInLine = width1 * width2;
             //int maxBitsInLine = bitsArea.Width / BIT_SIZE;
-            uint maxLinesInView = (uint)bitsArea.Height / BIT_SIZE;
+            uint maxLinesInView = (uint)(bitsArea.Height / BIT_SIZE);
             ulong startBitOffset = HStartOffset;
             uint lineInView = 0;
             uint bitInLine = 0;
@@ -216,7 +228,8 @@ namespace BitBox
                 if (segmentOffset >= data.Length)
                     break;
                 //DrawBit(bitInLine * BIT_SIZE, lineInView * BIT_SIZE, BIT_SIZE, e.Graphics, parser.ParsedData[segmentOffset][bitOffset]);
-                e.Graphics.FillRectangle(betweenBitsBrush, bitInLine * BIT_SIZE, lineInView * BIT_SIZE, BIT_SIZE, BIT_SIZE);
+                if (BitSize > 5)
+                    e.Graphics.FillRectangle(betweenBitsBrush, bitInLine * BIT_SIZE, lineInView * BIT_SIZE, BIT_SIZE, BIT_SIZE);
 
                 // Choose relevant brush 
                 SolidBrush choosenBrush;
@@ -234,7 +247,10 @@ namespace BitBox
                     else
                         choosenBrush = bitZeroBrush;
                 }
-                e.Graphics.FillRectangle(choosenBrush, bitInLine * BIT_SIZE + 1, lineInView * BIT_SIZE + 1, BIT_SIZE - 2, BIT_SIZE - 2);
+                if (BitSize > 5)
+                    e.Graphics.FillRectangle(choosenBrush, bitInLine * BIT_SIZE + 1, lineInView * BIT_SIZE + 1, BIT_SIZE - 2, BIT_SIZE - 2);
+                else
+                    e.Graphics.FillRectangle(choosenBrush, bitInLine * BIT_SIZE, lineInView * BIT_SIZE, BIT_SIZE, BIT_SIZE);
                 bitOffset++;
                 bitInLine++;
             }
