@@ -80,9 +80,9 @@ namespace BitBox
 
         }
 
-        public ulong findBitOffsetAtSegAndLine(ulong segIndex, ulong lineIndex)
+        public ulong findBitOffsetAtLine(ulong lineIndex, ulong width)
         {
-            throw new NotImplementedException();
+           return lineIndex * width;
         }
         
         public ulong Longest

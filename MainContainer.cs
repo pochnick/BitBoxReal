@@ -20,6 +20,8 @@ namespace BitBox
         {
             InitializeComponent();
             parser = new Parser(new Parser.GetParsedData(bitView1.SetData));
+            vScrollBar1.Minimum = 0;
+            vScrollBar1.Maximum = 1000;
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -59,6 +61,23 @@ namespace BitBox
                 PluginsWindow plugins = new PluginsWindow(parser);
                 plugins.Show();
             }
+        }
+
+        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
+            bitView1.VStartOffset = (uint)vScrollBar1.Value;
+            bitView1.Invalidate();
+        }
+
+        private void hScrollBar2_Scroll(object sender, ScrollEventArgs e)
+        {
+            bitView1.HStartOffset = (uint)hScrollBar2.Value;
+            bitView1.Invalidate();
+        }
+
+        private void SetVScrollbarMax(int max)
+        {
+            vScrollBar1.Maximum = (int)bitView1.Data.Length;
         }
     }
 }

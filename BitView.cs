@@ -28,7 +28,8 @@ namespace BitBox
         private uint width2;
         private uint gridSizeX = 8;
         private uint gridSizeY = 8;
-
+        private uint hStartOffset = 0;
+        private uint vStartOffset = 0;
 
         public BitView()
         {
@@ -63,6 +64,7 @@ namespace BitBox
         public void SetData(ViewingData data)
         {
             this.data = data;
+            data.UpdateSegsLineView(width1 * width2);
             bitsArea.Invalidate();
         }
 
@@ -93,6 +95,30 @@ namespace BitBox
             get
             {
                 return gridSizeY;
+            }
+        }
+
+        public uint HStartOffset
+        {
+            get
+            {
+                return hStartOffset;
+            }
+            set
+            {
+                hStartOffset = value;
+            }
+        }
+
+        public uint VStartOffset
+        {
+            get
+            {
+                return vStartOffset;
+            }
+            set
+            {
+                vStartOffset = value;
             }
         }
 
@@ -153,23 +179,39 @@ namespace BitBox
             uint maxBitsInLine = width1 * width2;
             //int maxBitsInLine = bitsArea.Width / BIT_SIZE;
             uint maxLinesInView = (uint)bitsArea.Height / BIT_SIZE;
+            ulong startBitOffset = HStartOffset;
             uint lineInView = 0;
             uint bitInLine = 0;
-            ulong segmentOffset = 0;
-            ulong bitOffset = 0;
+            ulong segmentOffset = data.findSegAtLine(VStartOffset, 0);
+            ulong bitOffset = data.findBitOffsetAtLine(VStartOffset, width1 * width2) + startBitOffset;
             while (lineInView < maxLinesInView)
             {
+                if (data[segmentOffset].Length - startBitOffset <= 0)
+                {
+                    lineInView++;
+                    bitInLine = 0;
+                    bitOffset = startBitOffset;
+                    segmentOffset++;
+                    continue;
+                }
                 if (bitOffset >= data[segmentOffset].Length)
                 {
                     lineInView++;
                     bitInLine = 0;
-                    bitOffset = 0;
+                    bitOffset = startBitOffset;
                     segmentOffset++;
+                    continue;
                 }
-                if (bitInLine >= maxBitsInLine)
+                if (maxBitsInLine-startBitOffset <= 0)
+                {
+                    lineInView++;
+                    continue;
+                }
+                if (bitInLine >= maxBitsInLine-startBitOffset)
                 {
                     bitInLine = 0;
                     lineInView++;
+                    bitOffset += startBitOffset;
                 }
                 if (segmentOffset >= data.Length)
                     break;
